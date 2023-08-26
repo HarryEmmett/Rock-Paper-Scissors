@@ -1,7 +1,21 @@
 const rock = "rock";
 const paper = "paper";
 const scissors = "scissors";
-const games = 5;
+
+let roundsLeft = 5;
+let playerScore = 0;
+let computerScore = 0;
+let draw = 0;
+
+const allButtons = document.querySelectorAll("button");
+const welcomeDiv = document.querySelector("#welcome-container");
+const computerGuess = document.querySelector("#computer");
+const winner = document.querySelector("#winner");
+const resetButton = document.querySelector("#reset");
+const topDivText = document.querySelector("#welcome-message");
+const gameHistory = document.querySelector(".history");
+
+const newTopDivText = document.createElement("p");
 
 function playRound(playerSelection, computerSelection) {
   const playerLCase = playerSelection.toLowerCase();
@@ -25,25 +39,81 @@ function getComputerChoice() {
   return options[Math.floor(1 + Math.random() * 3) - 1];
 }
 
-function game() {
-  let player = 0;
-  let computer = 0;
+allButtons.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
 
-  for (let i = 0; i < games; i++) {
-    const getInput = prompt("Enter: ");
-    const computerSelection = getComputerChoice();
+    if (e.target.value === "reset") {
+      document.body.style.background = "lightgrey";
+      playerScore = 0;
+      computerScore = 0;
+      draw = 0;
+      roundsLeft = 5;
+      computerGuess.innerText = "?";
+      allButtons.forEach((btn) =>
+        btn.id === "reset" ? (btn.disabled = true) : (btn.disabled = false)
+      );
 
-    const game = playRound(getInput, computerSelection);
+      while (gameHistory.firstChild) {
+        gameHistory.removeChild(gameHistory.firstChild);
+      }
 
-    if (game.includes("win")) {
-      player++;
+      while (welcomeDiv.firstChild) {
+        welcomeDiv.removeChild(welcomeDiv.firstChild);
+      }
+
+      newTopDivText.innerText = `Welcome, select an option to begin!`;
+      welcomeDiv.appendChild(newTopDivText);
+    } else {
+      resetButton.disabled = false;
+      topDivText.remove();
+      const roundWinner = document.createElement("p");
+      const computerSelection = getComputerChoice();
+
+      computerGuess.innerHTML = computerSelection;
+
+      const game = playRound(e.target.value, computerSelection);
+
+      if (game.includes("win")) {
+        playerScore++;
+        document.body.style.background = "rgba(76, 175, 80, 0.9)";
+        roundWinner.innerText = `Win ${e.target.value} beats ${computerSelection}`;
+      }
+
+      if (game.includes("lose")) {
+        computerScore++;
+        document.body.style.background = "rgb(255, 51, 0, 0.8)";
+        roundWinner.innerText = `Loss ${computerSelection} beats ${e.target.value}`;
+      }
+
+      if (game.includes("draw")) {
+        draw++;
+        document.body.style.background = "lightgrey";
+        roundWinner.innerText = "Draw!";
+      }
+      
+      gameHistory.appendChild(roundWinner);
+
+      newTopDivText.innerText = `Attempts: ${roundsLeft} Score: Player: ${playerScore}, Computer: ${computerScore}, Draw: ${draw}`;
+
+      while (welcomeDiv.firstChild) {
+        welcomeDiv.removeChild(welcomeDiv.firstChild);
+      }
+
+      welcomeDiv.appendChild(newTopDivText);
+
+      console.log(
+        `Player: ${playerScore}, Computer: ${computerScore}, Draw: ${draw}`
+      );
+
+      roundsLeft--;
+
+      if (roundsLeft === 0) {
+        newTopDivText.innerText = `Final score: You: ${playerScore} Computer: ${computerScore}. Press reset to play again`;
+        allButtons.forEach((btn) =>
+          btn.id === "reset" ? (btn.disabled = false) : (btn.disabled = true)
+        );
+        return;
+      }
     }
-
-    if (game.includes("lose")) {
-      computer++;
-    }
-  }
-  console.log(`Player: ${player}, Computer: ${computer}`);
-}
-
-game();
+  });
+});

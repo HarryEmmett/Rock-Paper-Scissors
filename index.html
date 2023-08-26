@@ -1,12 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    
-</body>
-    <script src="index.js"></script>
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="scores" id="welcome-container">
+        <p id="welcome-message">Welcome, select an option to begin!</p>
+      </div>
+      <div class="scores">
+        <button id="rock" value="rock">rock</button>
+        <button id="paper" value="paper">paper</button>
+        <button id="scissors" value="scissors">scissors</button>
+      </div>
+      <div class="scores">
+        <p id="computer" value="computer">?</p>
+      </div>
+      <div id="reset-button">
+        <button id="reset" value="reset" disabled>reset</button>
+      </div>
+      <h3>History: </h3>
+      <div class="history"></div>
+    </div>
+  </body>
+  <script src="index.js"></script>
 </html>
