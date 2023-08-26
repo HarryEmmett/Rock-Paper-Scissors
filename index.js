@@ -39,39 +39,31 @@ function getComputerChoice() {
   return options[Math.floor(1 + Math.random() * 3) - 1];
 }
 
+function resetGame() {
+  document.body.style.background = "lightgrey";
+  playerScore = 0;
+  computerScore = 0;
+  draw = 0;
+  roundsLeft = 5;
+  computerGuess.innerText = "?";
+  allButtons.forEach((btn) =>
+    btn.id === "reset" ? (btn.disabled = true) : (btn.disabled = false)
+  );
+  while (gameHistory.firstChild) {
+    gameHistory.removeChild(gameHistory.firstChild);
+  }
+  newTopDivText.innerText = `Welcome, select an option to begin!`;
+  welcomeDiv.appendChild(newTopDivText);
+}
+
 allButtons.forEach((btn) => {
   btn.addEventListener("click", (e) => {
-
     if (e.target.value === "reset") {
-      document.body.style.background = "lightgrey";
-      playerScore = 0;
-      computerScore = 0;
-      draw = 0;
-      roundsLeft = 5;
-      computerGuess.innerText = "?";
-      allButtons.forEach((btn) =>
-        btn.id === "reset" ? (btn.disabled = true) : (btn.disabled = false)
-      );
-
-      while (gameHistory.firstChild) {
-        gameHistory.removeChild(gameHistory.firstChild);
-      }
-
-      while (welcomeDiv.firstChild) {
-        welcomeDiv.removeChild(welcomeDiv.firstChild);
-      }
-
-      newTopDivText.innerText = `Welcome, select an option to begin!`;
-      welcomeDiv.appendChild(newTopDivText);
+      resetGame();
     } else {
-      resetButton.disabled = false;
-      topDivText.remove();
-      const roundWinner = document.createElement("p");
       const computerSelection = getComputerChoice();
-
-      computerGuess.innerHTML = computerSelection;
-
       const game = playRound(e.target.value, computerSelection);
+      const roundWinner = document.createElement("p");
 
       if (game.includes("win")) {
         playerScore++;
@@ -91,15 +83,13 @@ allButtons.forEach((btn) => {
         roundWinner.innerText = "Draw!";
       }
       
-      gameHistory.appendChild(roundWinner);
-
+      computerGuess.innerHTML = computerSelection;
+      topDivText.remove();
       newTopDivText.innerText = `Attempts: ${roundsLeft} Score: Player: ${playerScore}, Computer: ${computerScore}, Draw: ${draw}`;
 
-      while (welcomeDiv.firstChild) {
-        welcomeDiv.removeChild(welcomeDiv.firstChild);
-      }
-
       welcomeDiv.appendChild(newTopDivText);
+
+      gameHistory.appendChild(roundWinner);
 
       console.log(
         `Player: ${playerScore}, Computer: ${computerScore}, Draw: ${draw}`
@@ -108,7 +98,7 @@ allButtons.forEach((btn) => {
       roundsLeft--;
 
       if (roundsLeft === 0) {
-        newTopDivText.innerText = `Final score: You: ${playerScore} Computer: ${computerScore}. Press reset to play again`;
+        newTopDivText.innerText = `Final scores - You: ${playerScore}, Computer: ${computerScore}.`;
         allButtons.forEach((btn) =>
           btn.id === "reset" ? (btn.disabled = false) : (btn.disabled = true)
         );
