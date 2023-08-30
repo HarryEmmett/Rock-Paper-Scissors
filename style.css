@@ -2,11 +2,12 @@ html,
 body {
   margin: 0;
   height: 100%;
+  width: 100%;
   text-align: center;
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding-top: 10px;
+  background-color: lightgray;
 }
 
 #reset-button {
@@ -32,6 +33,7 @@ button {
 }
 
 .container {
+  margin-top: 20px;
   padding: 20px 20px 20px 20px;
   background-color: white;
   border: 2px solid darkgray;
