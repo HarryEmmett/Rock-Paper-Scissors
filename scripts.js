@@ -36,7 +36,7 @@ function playRound(playerSelection, computerSelection) {
 
 function getComputerChoice() {
   const options = [rock, paper, scissors];
-  return options[Math.floor(1 + Math.random() * 3) - 1];
+  return options[Math.floor(Math.random() * 3)];
 }
 
 function resetGame() {
